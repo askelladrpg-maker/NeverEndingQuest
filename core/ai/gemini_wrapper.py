@@ -119,11 +119,13 @@ class GeminiChatCompletions:
                 max_output_tokens=max_tokens if max_tokens else 8192,
             )
             
+            print("[AI_WRAPPER] Calling Gemini API...")
             # Generate response
             response = gemini_model.generate_content(
                 gemini_prompt,
                 generation_config=generation_config
             )
+            print("[AI_WRAPPER] Received response from Gemini API.")
             
             # Convert Gemini response to OpenAI format
             return self._convert_response_to_openai_format(response, model)
