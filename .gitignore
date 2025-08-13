@@ -10,7 +10,7 @@ env/
 ENV/
 
 # Configuration files
-config.py
+
 
 # Logs
 *.log

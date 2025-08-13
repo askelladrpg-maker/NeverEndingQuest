@@ -36,7 +36,7 @@ def generate_env_vars():
                 print("Please download your Google API credentials and save them as 'credentials.json' in this directory.")
                 return
             flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
-            creds = flow.run_local_server(port=0)
+            creds = flow.run_local_server(port=8080)
         
         # Save the credentials for the next run
         with open(TOKEN_PICKLE_FILE, 'wb') as token:
