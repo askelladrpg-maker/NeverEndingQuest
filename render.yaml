@@ -7,7 +7,7 @@ services:
     plan: free
 
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT web.web_interface:app"
+    startCommand: "gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT main:app"
     envVars:
       - key: GEMINI_API_KEY
         sync: false # Set this value directly in the Render dashboard

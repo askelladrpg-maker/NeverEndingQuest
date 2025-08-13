@@ -1,4 +1,12 @@
-# SPDX-FileCopyrightText: 2024 MoonlightByte
+# main.py - Entry point for Gunicorn on Render to ensure monkey_patch() is called first.
+import eventlet
+eventlet.monkey_patch()
+
+# Now that monkey_patch() has been called, we can import the Flask app.
+from web.web_interface import app
+
+# Gunicorn will look for this 'app' object.
+# The if __name__ == '__main__': block is not needed for Render's gunicorn execution.
 # SPDX-License-Identifier: Fair-Source-1.0
 # License: See LICENSE file in the repository root
 # This software is subject to the terms of the Fair Source License.
