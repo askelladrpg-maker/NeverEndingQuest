@@ -39,6 +39,10 @@ Web Interface for NeverEndingQuest
 This module provides a Flask-based web interface for the dungeon master game,
 with separate panels for game output and debug information.
 """
+# Apply eventlet monkey patching before any other imports
+import eventlet
+eventlet.monkey_patch()
+
 # Suppress httpx debug messages on startup
 import logging
 logging.getLogger("httpx").setLevel(logging.WARNING)
