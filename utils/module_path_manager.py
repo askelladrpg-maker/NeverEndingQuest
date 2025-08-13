@@ -74,20 +74,30 @@ class ModulePathManager:
         self.module_dir = f"modules/{self.module_name}"
         
     def _get_active_module(self):
-        """Read the active module from party_tracker.json"""
+        """Read the active module from party_tracker.json, creating it if it doesn't exist."""
+        default_module = "The_Thornwood_Watch"  # Consistent default module
         try:
             with open("party_tracker.json", 'r', encoding='utf-8') as file:
                 data = json.load(file)
-                module = data.get("module", "Keep_of_Doom")
-                # Only log if module changes or on first load
+                module = data.get("module", default_module)
                 if ModulePathManager._last_module_logged != module:
                     info(f"INITIALIZATION: Switched to module '{module}'", category="module_loading")
                     ModulePathManager._last_module_logged = module
                 return module
+        except FileNotFoundError:
+            warning("FILE_OP: 'party_tracker.json' not found. Creating a new one.", category="file_operations")
+            try:
+                with open("party_tracker.json", 'w', encoding='utf-8') as file:
+                    json.dump({"module": default_module, "party": []}, file, indent=4)
+                info(f"FILE_OP: Created 'party_tracker.json' with default module '{default_module}'.", category="file_operations")
+                return default_module
+            except Exception as e_create:
+                error("FILE_OP: Could not create 'party_tracker.json'.", exception=e_create, category="file_operations")
+                return default_module  # Fallback in case of write error
         except Exception as e:
             error(f"FILE_OP: Could not load party_tracker.json", exception=e, category="file_operations")
-            debug("INITIALIZATION: Using default module 'Keep_of_Doom'", category="module_loading")
-            return "Keep_of_Doom"  # Default fallback
+            debug(f"INITIALIZATION: Using default module '{default_module}'", category="module_loading")
+            return default_module
     
     def format_filename(self, name):
         """Convert a name to a filesystem-safe filename format
