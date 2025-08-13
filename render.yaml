@@ -5,7 +5,7 @@ services:
     name: neverending-quest
     env: python
     plan: free
-    pythonVersion: "3.11"
+
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT web.web_interface:app"
     envVars:
