@@ -44,14 +44,23 @@
 # Import model configuration settings
 from model_config import *
 
-# WARNING: Replace with your actual OpenAI API key and move to environment variables in production
-OPENAI_API_KEY = "your_openai_api_key_here"
+# Note: All model configurations are now imported from model_config.py above
+
+# --- API Configuration Migration ---
+# For backward compatibility during migration, both keys are available
+# New code should use GEMINI_API_KEY, legacy code still uses OPENAI_API_KEY
+
+# WARNING: Replace with your actual Gemini API key and move to environment variables in production
+# MIGRATED FROM OPENAI TO GEMINI API
+GEMINI_API_KEY = "AIzaSyApY_Y_nhZN4AAPj7_Den0f9YcCi45wuno"
+
+# Legacy OpenAI key (deprecated - use GEMINI_API_KEY instead)
+OPENAI_API_KEY = "AIzaSyApY_Y_nhZN4AAPj7_Den0f9YcCi45wuno"
 
 # --- Module folder structure ---
 MODULES_DIR = "modules"
 DEFAULT_MODULE = "The_Thornwood_Watch"
 
-# Note: All model configurations are now imported from model_config.py above
 
 # --- Web Interface Configuration ---
 WEB_PORT = 8357                                         # Port for the web interface (changed from 5000 for security)

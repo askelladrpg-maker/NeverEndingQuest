@@ -1,8 +1,16 @@
-# NeverEndingQuest Requirements
+flask
+flask_socketio
+python-socketio
+eventlet
+openai
+pillow
+python-dotenv
+httpx
+
 # Core dependencies for running the 5th edition AI dungeon master system
 
-# OpenAI API for AI model interactions
-openai>=1.0.0
+# Google Gemini API for AI model interactions (migrated from OpenAI)
+# openai>=1.0.0  # Removed - migrated to Gemini
 
 # Google Generative AI for Gemini integration
 google-generativeai>=0.8.0
@@ -10,6 +18,7 @@ google-generativeai>=0.8.0
 # Web interface framework
 Flask>=2.3.0
 Flask-SocketIO>=5.3.0
+waitress>=2.1.2
 python-socketio>=5.9.0
 
 # JSON schema validation for game data
@@ -24,7 +33,12 @@ tqdm>=4.65.0
 # HTTP requests for web interactions
 requests>=2.31.0
 
-# Token counting for OpenAI API usage tracking
+# Google Drive API for Cloud Storage
+google-api-python-client>=2.88.0
+google-auth-httplib2>=0.1.0
+google-auth-oauthlib>=1.0.0
+
+# Token counting (legacy from OpenAI - may need adjustment for Gemini)
 tiktoken>=0.5.0
 
 # Python standard library extensions (usually included)

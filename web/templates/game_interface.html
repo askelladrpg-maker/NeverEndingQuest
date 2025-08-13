@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NeverEndingQuest</title>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/static/js/translations.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         * {
@@ -3737,7 +3738,7 @@
     <div class="header">
         <h1>Never<span>Ending</span>Quest</h1>
         <div class="location-info" id="location-info">
-            <div class="location-name" id="location-name">Loading location...</div>
+            <div class="location-name" id="location-name">Carregando localização...</div>
             <div class="location-details" id="location-details"></div>
         </div>
         <div class="status">
@@ -3770,7 +3771,7 @@
     <div class="main-container">
         <div class="panel game-panel">
             <div class="panel-header">
-                <span id="panel-header-label">Game Output</span>
+                <span id="panel-header-label">Saída do Jogo</span>
                 <div id="combat-round-box" class="combat-round-box" style="display: none;">
                     <div class="combat-round-title">COMBAT</div>
                     <div class="combat-round-separator"></div>
@@ -3830,11 +3831,11 @@
         
         <div class="panel debug-panel">
             <div class="tabs">
-                <button class="tab-button active" onclick="switchTab('stats')">Character</button>
-                <button class="tab-button" onclick="switchTab('inventory')">Inventory</button>
-                <button class="tab-button" onclick="switchTab('spells')">Spells & Magic</button>
+                <button class="tab-button active" onclick="switchTab('stats')">Personagem</button>
+                <button class="tab-button" onclick="switchTab('inventory')">Inventário</button>
+                <button class="tab-button" onclick="switchTab('spells')">Magias e Magia</button>
                 <button class="tab-button" onclick="switchTab('npcs')">NPCs</button>
-                <button id="journal-btn" class="tab-button">Journal</button>
+                <button id="journal-btn" class="tab-button">Diário</button>
                 <button class="tab-button" onclick="switchTab('debug')">Debug</button>
             </div>
             <div class="tab-content" id="debug-tab" style="display: none;">
@@ -3850,21 +3851,21 @@
                 <div class="panel-content debug-scrollable" id="debug-output"></div>
             </div>
             <div class="tab-content" id="inventory-tab" style="display: none;">
-                <div class="loading">Loading inventory...</div>
+                <div class="loading">Carregando inventário...</div>
             </div>
             <div class="tab-content" id="stats-tab" style="display: flex;">
                 <div class="panel-content" id="stats-content">
-                    <div class="loading">Loading character stats...</div>
+                    <div class="loading">Carregando estatísticas do personagem...</div>
                 </div>
             </div>
             <div class="tab-content" id="spells-tab" style="display: none;">
                 <div class="panel-content" id="spells-content">
-                    <div class="loading">Loading spells and magic items...</div>
+                    <div class="loading">Carregando magias e itens mágicos...</div>
                 </div>
             </div>
             <div class="tab-content" id="npcs-tab" style="display: none;">
                 <div class="panel-content" id="npcs-content">
-                    <div class="loading">Loading NPC information...</div>
+                    <div class="loading">Carregando informações de NPCs...</div>
                 </div>
             </div>
         </div>
@@ -4427,18 +4428,20 @@
                     </div>`;
 
             // 3. Add the equipment section, which will be our scrollable list.
-            html += '<div class="equipment-section"><h4>Equipment</h4>';
+            html += '<div class="equipment-section"><h4>Equipamentos</h4>';
             if (data.equipment && data.equipment.length > 0) {
                 data.equipment.forEach(item => {
-                    const description = (item.description || 'No description available.').replace(/"/g, '&quot;');
-                    html += `<div class="inventory-item" data-tooltip-title="${item.item_name}" data-tooltip-content="${description}">
+                    const description = t(item.description || 'Nenhuma descrição disponível.').replace(/"/g, '&quot;');
+                    const translatedItemName = t(item.item_name) || item.item_name;
+                    const translatedItemType = t(item.item_type) || item.item_type || 'misc';
+                    html += `<div class="inventory-item" data-tooltip-title="${translatedItemName}" data-tooltip-content="${description}">
                                 <span class="feature-bullet">●</span>
-                                <span class="item-name">${item.item_name}${(item.quantity||1) > 1 ? ` ×${item.quantity}` : ''}</span>
-                                <span class="item-type"> (${(item.item_type || 'misc').toLowerCase()})</span>
+                                <span class="item-name">${translatedItemName}${(item.quantity||1) > 1 ? ` ×${item.quantity}` : ''}</span>
+                                <span class="item-type"> (${translatedItemType.toLowerCase()})</span>
                              </div>`;
                 });
             } else {
-                html += '<div class="inventory-item"><span class="feature-bullet">●</span><span class="item-name">No equipment</span></div>';
+                html += '<div class="inventory-item"><span class="feature-bullet">●</span><span class="item-name">Nenhum equipamento</span></div>';
             }
             html += '</div>'; // Close equipment-section
 
@@ -4543,7 +4546,7 @@
             
             const container = document.getElementById('stats-content');
             if (!data) {
-                container.innerHTML = '<div class="loading">No character data available</div>';
+                container.innerHTML = '<div class="loading">Nenhum dado de personagem disponível</div>';
                 return;
             }
             
@@ -4591,7 +4594,7 @@
                         <div class="character-portrait">
                             <img id="char-portrait-img" src="/static/portraits/${normalizedName}.png" onerror="this.onerror=null;this.src='/static/icons/default_portrait.png';">
                             <div class="upload-overlay" onclick="uploadPortrait('${normalizedName}')">
-                                <span>Upload Portrait</span>
+                                <span>Enviar Retrato</span>
                             </div>
                             <!-- Hidden input removed - using persistent input instead -->
                         </div>
@@ -4600,10 +4603,10 @@
                         <div class="character-header-info">
                             <div class="character-name">${data.name}</div>
                             <div class="character-details">
-                                <div><span class="orange">Level ${data.level}</span> ${data.race} ${data.class}</div>
+                                <div><span class="orange">Nível ${data.level}</span> ${t(data.race) || data.race} ${t(data.class) || data.class}</div>
                                 <div><span class="orange">XP:</span> ${data.experience_points} / ${data.exp_required_for_next_level}</div>
-                                <div><span class="orange">Profession:</span> ${data.background || 'Adventurer'}</div>
-                                <div><span class="orange">Alignment:</span> ${capitalizeWords(data.alignment) || 'Neutral'}</div>
+                                <div><span class="orange">Antecedente:</span> ${data.background || 'Aventureiro'}</div>
+                                <div><span class="orange">Tendência:</span> ${t(capitalizeWords(data.alignment)) || t('Neutral')}</div>
                             </div>
                         </div>
                     </div>`;
@@ -4621,7 +4624,7 @@
                                   data-ability="${capitalizedAbility}"
                                   onmouseenter="showSkillTooltip(event, ${dataString}, ${skillsString})"
                                   onmouseleave="hideSkillTooltip()">
-                                <div class="ability-name">${ability.substr(0, 3).toUpperCase()}</div>
+                                <div class="ability-name">${t(ability.substr(0, 3).toUpperCase())}</div>
                                 <div class="ability-value">${score}</div>
                                 <div class="ability-modifier">${getModifier(score)}</div>
                              </div>`;
@@ -4632,12 +4635,12 @@
             // MODIFIED: Added 'currency' class to currency boxes
             html += `<div class="combat-stats">
                         <div class="combat-stat">
-                            <div class="combat-stat-label">HP</div>
+                            <div class="combat-stat-label">PV</div>
                             <div class="combat-stat-value">${data.hitPoints}/${data.maxHitPoints}</div>
                             <div class="hp-bar"><div class="hp-fill ${hpClass}" style="width: ${hpPercent}%"></div></div>
                         </div>
                         <div class="combat-stat">
-                            <div class="combat-stat-label">AC</div>
+                            <div class="combat-stat-label">CA</div>
                             <div class="combat-stat-value">${data.armorClass}</div>
                         </div>
                         <div class="combat-stat">
@@ -4645,15 +4648,15 @@
                             <div class="combat-stat-value">${data.initiative >= 0 ? '+' : ''}${data.initiative}</div>
                         </div>
                         <div class="combat-stat currency">
-                            <div class="combat-stat-label">GP</div>
+                            <div class="combat-stat-label">PO</div>
                             <div class="combat-stat-value">${data.currency?.gold || 0}</div>
                         </div>
                         <div class="combat-stat currency">
-                            <div class="combat-stat-label">SP</div>
+                            <div class="combat-stat-label">PP</div>
                             <div class="combat-stat-value">${data.currency?.silver || 0}</div>
                         </div>
                         <div class="combat-stat currency">
-                            <div class="combat-stat-label">CP</div>
+                            <div class="combat-stat-label">PC</div>
                             <div class="combat-stat-value">${data.currency?.copper || 0}</div>
                         </div>
                     </div>`;
@@ -4663,40 +4666,53 @@
             
             // --- START OF WEAPONS & ATTACKS FIX ---
             if (data.attacksAndSpellcasting && data.attacksAndSpellcasting.length > 0) {
-                html += '<div class="stat-group"><h4>Weapons & Attacks</h4><div class="stat-group-content">';
-                data.attacksAndSpellcasting.forEach(weapon => { 
-                    const description = (weapon.description || 'No description available.').replace(/"/g, '&quot;');
+                html += '<div class="stat-group"><h4>Armas e Ataques</h4><div class="stat-group-content">';
+                data.attacksAndSpellcasting.forEach(weapon => {
+                    const description = t(weapon.description || 'Nenhuma descrição disponível.').replace(/"/g, '&quot;');
                     const damageString = weapon.damage || `${weapon.damageDice}+${weapon.damageBonus}`;
-                    html += `<div class="feature-item" data-tooltip-title="${weapon.name}" data-tooltip-content="${description}">
-                                <span class="feature-name" style="color: #4CAF50;">${weapon.name} (${damageString})</span>
-                             </div>`; 
+                    
+                    // Lógica para separar e traduzir nomes compostos (ex: "Dagger (Melee)")
+                    let finalWeaponName = '';
+                    const nameMatch = weapon.name.match(/([\w\s]+)(?:\((.+)\))?/);
+                    if (nameMatch) {
+                        const mainName = t(nameMatch[1].trim());
+                        const type = nameMatch[2] ? `(${t(nameMatch[2])})` : '';
+                        finalWeaponName = `${mainName} ${type}`.trim();
+                    } else {
+                        finalWeaponName = t(weapon.name);
+                    }
+
+                    html += `<div class="feature-item" data-tooltip-title="${finalWeaponName}" data-tooltip-content="${description}">
+                                <span class="feature-name" style="color: #4CAF50;">${finalWeaponName} (${damageString})</span>
+                             </div>`;
                 });
                 html += '</div></div>';
             } else {
-                html += '<div class="stat-group"><h4>Weapons & Attacks</h4><div class="stat-group-content"><div class="inventory-item"><span class="item-name">No weapons defined.</span></div></div></div>';
+                html += '<div class="stat-group"><h4>Armas e Ataques</h4><div class="stat-group-content"><div class="inventory-item"><span class="item-name">Nenhuma arma definida.</span></div></div></div>';
             }
             // --- END OF WEAPONS & ATTACKS FIX ---
 
             if (data.ammunition && Array.isArray(data.ammunition) && data.ammunition.length > 0) {
-                html += '<div class="stat-group"><h4>Ammunition</h4><div class="stat-group-content">';
+                html += '<div class="stat-group"><h4>Munição</h4><div class="stat-group-content">';
                 data.ammunition.forEach(ammo => {
-                    html += `<div class="inventory-item" style="border-bottom: none; padding: 2px 4px;"><div class="item-main" style="margin-bottom: 0;"><span class="item-name" style="font-size: 16px;">${ammo.name}</span><span class="item-qty" style="font-size: 16px;">×${ammo.quantity}</span></div></div>`;
+                    html += `<div class="inventory-item" style="border-bottom: none; padding: 2px 4px;"><div class="item-main" style="margin-bottom: 0;"><span class="item-name" style="font-size: 16px;">${t(ammo.name)}</span><span class="item-qty" style="font-size: 16px;">×${ammo.quantity}</span></div></div>`;
                 });
                 html += '</div></div>';
             } else {
-                html += '<div class="stat-group"><h4>Ammunition</h4><div class="stat-group-content"><div class="inventory-item" style="border-bottom: none; padding: 2px 4px;"><span class="item-name" style="font-size: 16px;">No ammunition.</span></div></div></div>';
+                html += '<div class="stat-group"><h4>Munição</h4><div class="stat-group-content"><div class="inventory-item" style="border-bottom: none; padding: 2px 4px;"><span class="item-name" style="font-size: 16px;">Nenhuma munição.</span></div></div></div>';
             }
             
             html += '</div>';
 
             // Saving Throws (Full-width with 2-column internal layout)
             if (data.savingThrows && data.savingThrows.length > 0) {
-                html += '<div class="stat-group saving-throws-group" style="margin-top: 3px;"><h4>Saving Throws</h4><div class="stat-group-content">';
+                html += '<div class="stat-group saving-throws-group" style="margin-top: 3px;"><h4>Testes de Resistência</h4><div class="stat-group-content">';
                 ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma'].forEach(save => {
+                    const translatedSave = t(save);
                     const isProficient = data.savingThrows.includes(save);
                     const abilityMod = data.abilities ? Math.floor((data.abilities[save.toLowerCase()] - 10) / 2) : 0;
                     const bonus = isProficient ? abilityMod + (data.proficiencyBonus || 2) : abilityMod;
-                    html += `<div class="save-item"><span class="save-name">${save} ${isProficient ? '●' : '○'}</span><span class="save-value">${bonus >= 0 ? '+' : ''}${bonus}</span></div>`;
+                    html += `<div class="save-item"><span class="save-name">${translatedSave} ${isProficient ? '●' : '○'}</span><span class="save-value">${bonus >= 0 ? '+' : ''}${bonus}</span></div>`;
                 });
                 html += '</div></div>';
             }
@@ -4705,46 +4721,46 @@
             // Features and other sections (in abilities-grid for better layout)
             html += '<div class="abilities-grid">';
             if (data.classFeatures && data.classFeatures.length > 0) {
-                html += '<div class="stat-group"><h4>Class Features</h4><div class="stat-group-content">';
+                html += '<div class="stat-group"><h4>Características de Classe</h4><div class="stat-group-content">';
                 data.classFeatures.forEach(feature => {
                     let usageDisplay = '';
                     if (feature.usage && feature.usage.current !== undefined && feature.usage.max > 0) {
                         usageDisplay = ` <span class="usage-counter ${feature.usage.current === 0 ? 'exhausted' : ''}">${feature.usage.current}/${feature.usage.max}</span>`;
                     }
-                    const description = (feature.description || 'No description available.').replace(/"/g, '&quot;');
-                    html += `<div class="feature-item" data-tooltip-title="${feature.name}" data-tooltip-content="${description}"><span class="feature-name">${feature.name}</span>${usageDisplay}${(feature.usage && feature.usage.refreshOn) ? ` <span class="feature-refresh">(${feature.usage.refreshOn})</span>` : ''}</div>`;
+                    const description = t(feature.description || 'Nenhuma descrição disponível.').replace(/"/g, '&quot;');
+                    html += `<div class="feature-item" data-tooltip-title="${t(feature.name) || feature.name}" data-tooltip-content="${description}"><span class="feature-name">${t(feature.name) || feature.name}</span>${usageDisplay}${(feature.usage && feature.usage.refreshOn) ? ` <span class="feature-refresh">(${feature.usage.refreshOn})</span>` : ''}</div>`;
                 });
                 html += '</div></div>';
             }
             if (data.temporaryEffects && data.temporaryEffects.length > 0) {
-                html += '<div class="stat-group"><h4>Active Effects</h4><div class="stat-group-content">';
+                html += '<div class="stat-group"><h4>Efeitos Ativos</h4><div class="stat-group-content">';
                 data.temporaryEffects.forEach(effect => {
                     let durationDisplay = effect.duration ? ` <span class="effect-duration">${effect.duration}</span>` : '';
-                    const description = (effect.description || 'No description available.').replace(/"/g, '&quot;');
-                    html += `<div class="feature-item" data-tooltip-title="${effect.name}" data-tooltip-content="${description}"><div class="feature-header"><span class="feature-name">${effect.name}</span>${durationDisplay}</div></div>`;
+                    const description = t(effect.description || 'Nenhuma descrição disponível.').replace(/"/g, '&quot;');
+                    html += `<div class="feature-item" data-tooltip-title="${t(effect.name) || effect.name}" data-tooltip-content="${description}"><div class="feature-header"><span class="feature-name">${t(effect.name) || effect.name}</span>${durationDisplay}</div></div>`;
                 });
                 html += '</div></div>';
             }
             if (data.racialTraits && data.racialTraits.length > 0) {
                 const specialTraits = data.racialTraits.filter(trait => !['Ability Score Increase', 'Languages', 'Extra Language'].includes(trait.name));
                 if (specialTraits.length > 0) {
-                    html += '<div class="stat-group"><h4>Racial Traits</h4><div class="stat-group-content">';
+                    html += '<div class="stat-group"><h4>Traços Raciais</h4><div class="stat-group-content">';
                     specialTraits.forEach(trait => { 
-                        const description = (trait.description || 'No description available.').replace(/"/g, '&quot;');
-                        html += `<div class="feature-item" data-tooltip-title="${trait.name}" data-tooltip-content="${description}"><span class="feature-name">${trait.name}</span></div>`; 
+                        const description = t(trait.description || 'Nenhuma descrição disponível.').replace(/"/g, '&quot;');
+                        html += `<div class="feature-item" data-tooltip-title="${t(trait.name) || trait.name}" data-tooltip-content="${description}"><span class="feature-name">${t(trait.name) || trait.name}</span></div>`; 
                     });
                     html += '</div></div>';
                 }
             }
             if (data.backgroundFeature && data.backgroundFeature.name) {
-                const description = (data.backgroundFeature.description || 'No description available.').replace(/"/g, '&quot;');
-                html += `<div class="stat-group"><h4>Background</h4><div class="stat-group-content"><div class="feature-item" data-tooltip-title="${data.backgroundFeature.name}" data-tooltip-content="${description}"><span class="feature-name">${data.backgroundFeature.name}</span></div></div></div>`;
+                const description = t(data.backgroundFeature.description || 'Nenhuma descrição disponível.').replace(/"/g, '&quot;');
+                html += `<div class="stat-group"><h4>Antecedente</h4><div class="stat-group-content"><div class="feature-item" data-tooltip-title="${t(data.backgroundFeature.name) || data.backgroundFeature.name}" data-tooltip-content="${description}"><span class="feature-name">${t(data.backgroundFeature.name) || data.backgroundFeature.name}</span></div></div></div>`;
             }
             if (data.feats && data.feats.length > 0) {
-                html += '<div class="stat-group"><h4>Feats</h4><div class="stat-group-content">';
+                html += '<div class="stat-group"><h4>Talentos</h4><div class="stat-group-content">';
                 data.feats.forEach(feat => { 
-                    const description = (feat.description || 'No description available.').replace(/"/g, '&quot;');
-                    html += `<div class="feature-item" data-tooltip-title="${feat.name}" data-tooltip-content="${description}"><span class="feature-name">${feat.name}</span></div>`; 
+                    const description = t(feat.description || 'Nenhuma descrição disponível.').replace(/"/g, '&quot;');
+                    html += `<div class="feature-item" data-tooltip-title="${t(feat.name) || feat.name}" data-tooltip-content="${description}"><span class="feature-name">${t(feat.name) || feat.name}</span></div>`; 
                 });
                 html += '</div></div>';
             }
@@ -4780,7 +4796,7 @@
             let html = '<div class="spells-magic-sheet">';
             const hasSpellcasting = data.spellcasting && data.spellcasting.spells && Object.values(data.spellcasting.spells).some(s => Array.isArray(s) && s.length > 0);
             if (hasSpellcasting) {
-                html += '<div class="spellcasting-section"><h3>SPELLCASTING</h3>';
+                html += `<div class="spellcasting-section"><h3>${t('SPELLCASTING')}</h3>`;
                 if (data.spellcasting.spellSaveDC || data.spellcasting.spellAttackBonus) { html += `<div class="spell-stats">${data.spellcasting.spellSaveDC ? `<span>Save DC: ${data.spellcasting.spellSaveDC}</span>` : ''}${data.spellcasting.spellAttackBonus ? `<span>Spell Attack: +${data.spellcasting.spellAttackBonus}</span>` : ''}</div>`; }
                 const spellLevels = ['cantrips', 'level1', 'level2', 'level3', 'level4', 'level5', 'level6', 'level7', 'level8', 'level9'];
                 const spellLevelNames = ['Cantrips', '1st Level', '2nd Level', '3rd Level', '4th Level', '5th Level', '6th Level', '7th Level', '8th Level', '9th Level'];

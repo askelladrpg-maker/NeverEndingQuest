@@ -52,15 +52,15 @@ Features:
 import json
 import os
 import sys
-from openai import OpenAI
-from config import OPENAI_API_KEY, LEVEL_UP_MODEL, DM_VALIDATION_MODEL
+from core.ai.gemini_wrapper import OpenAI
+from config import GEMINI_API_KEY, LEVEL_UP_MODEL, DM_VALIDATION_MODEL
 from utils.file_operations import safe_read_json
 from updates.update_character_info import update_character_info, normalize_character_name
 from utils.encoding_utils import safe_json_dump
 from utils.module_path_manager import ModulePathManager
 
 # Initialize OpenAI client
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 # --- Class-based Level Up Manager ---
 

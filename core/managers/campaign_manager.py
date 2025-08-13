@@ -71,7 +71,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 import config
 from utils.encoding_utils import safe_json_load, safe_json_dump
 from utils.module_path_manager import ModulePathManager
@@ -87,7 +87,7 @@ class CampaignManager:
         """Initialize campaign manager"""
         self.campaign_file = "modules/campaign.json"
         self.summaries_dir = "modules/campaign_summaries"
-        self.client = OpenAI(api_key=config.OPENAI_API_KEY)
+        self.client = OpenAI(api_key=config.GEMINI_API_KEY)
         
         # Ensure directories exist
         os.makedirs(self.summaries_dir, exist_ok=True)

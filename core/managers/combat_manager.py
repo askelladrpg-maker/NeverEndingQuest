@@ -119,11 +119,11 @@ import random
 import subprocess
 from datetime import datetime
 from utils.xp import main as calculate_xp
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 
 # Import OpenAI usage tracking (safe - won't break if fails)
 try:
-    from utils.openai_usage_tracker import track_response, get_usage_stats
+    from utils.gemini_usage_tracker import track_response, get_usage_stats
     USAGE_TRACKING_AVAILABLE = True
     print("[COMBAT_MANAGER] OpenAI usage tracking enabled")
 except Exception as e:
@@ -133,7 +133,7 @@ except Exception as e:
     def get_usage_stats(): return {}
 # Import model configurations from config.py
 from config import (
-    OPENAI_API_KEY,
+    GEMINI_API_KEY,
     COMBAT_MAIN_MODEL,
     # Use the existing validation model instead of COMBAT_VALIDATION_MODEL
     DM_VALIDATION_MODEL, 
@@ -207,7 +207,7 @@ def get_combat_temperature(encounter_data, validation_attempt=0):
     return final_temp
 
 # OpenAI client
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 conversation_history_file = "modules/conversation_history/combat_conversation_history.json"
 second_model_history_file = "modules/conversation_history/second_model_history.json"

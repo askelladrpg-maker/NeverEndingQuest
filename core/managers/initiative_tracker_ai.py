@@ -11,8 +11,8 @@ Used to enhance the combat state display with live turn tracking.
 
 import json
 import re
-from openai import OpenAI
-from config import OPENAI_API_KEY, DM_MAIN_MODEL
+from core.ai.gemini_wrapper import OpenAI
+from config import GEMINI_API_KEY, DM_MAIN_MODEL
 import logging
 
 logger = logging.getLogger(__name__)
@@ -137,7 +137,7 @@ def generate_live_initiative_tracker(encounter_data, conversation_history, curre
         str: Formatted initiative tracker or None if generation fails
     """
     try:
-        if not OPENAI_API_KEY:
+        if not GEMINI_API_KEY:
             logger.warning("OpenAI API key not configured, cannot generate initiative tracker")
             return None
         
@@ -161,7 +161,7 @@ def generate_live_initiative_tracker(encounter_data, conversation_history, curre
         prompt = create_initiative_prompt(relevant_messages, creatures, current_round)
         
         # Query AI model
-        client = OpenAI(api_key=OPENAI_API_KEY)
+        client = OpenAI(api_key=GEMINI_API_KEY)
         response = client.chat.completions.create(
             model=DM_MAIN_MODEL,
             messages=[

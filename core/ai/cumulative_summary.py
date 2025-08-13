@@ -52,16 +52,16 @@
 import json
 import os
 from datetime import datetime
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 
 # Import OpenAI usage tracking (safe - won't break if fails)
 try:
-    from utils.openai_usage_tracker import track_response
+    from utils.gemini_usage_tracker import track_response
     USAGE_TRACKING_AVAILABLE = True
 except:
     USAGE_TRACKING_AVAILABLE = False
     def track_response(r): pass
-from config import OPENAI_API_KEY, ADVENTURE_SUMMARY_MODEL
+from config import GEMINI_API_KEY, ADVENTURE_SUMMARY_MODEL
 from utils.module_path_manager import ModulePathManager
 from utils.file_operations import safe_write_json, safe_read_json
 from utils.encoding_utils import sanitize_text, safe_json_load, safe_json_dump
@@ -72,7 +72,7 @@ from utils.enhanced_logger import debug, info, warning, error, set_script_name
 set_script_name("cumulative_summary")
 
 TEMPERATURE = 0.8
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 def debug_print(text, log_to_file=True):
     """Print debug message and optionally log to file"""

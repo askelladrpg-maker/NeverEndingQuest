@@ -22,18 +22,18 @@ from datetime import datetime
 # Add the project root to the Python path so we can import from utils, core, etc.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 
 # Import OpenAI usage tracking (safe - won't break if fails)
 try:
-    from utils.openai_usage_tracker import track_response
+    from utils.gemini_usage_tracker import track_response
     USAGE_TRACKING_AVAILABLE = True
 except:
     USAGE_TRACKING_AVAILABLE = False
     def track_response(r): pass
 
 from jsonschema import validate, ValidationError
-from config import OPENAI_API_KEY, ADVENTURE_SUMMARY_MODEL
+from config import GEMINI_API_KEY, ADVENTURE_SUMMARY_MODEL
 from utils.module_path_manager import ModulePathManager
 from utils.encoding_utils import sanitize_text, safe_json_load, safe_json_dump
 from core.managers.status_manager import status_generating_summary
@@ -43,7 +43,7 @@ from utils.enhanced_logger import debug, info, warning, error, set_script_name
 set_script_name("adv_summary")
 
 TEMPERATURE = 0.8
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 def get_current_location():
     try:

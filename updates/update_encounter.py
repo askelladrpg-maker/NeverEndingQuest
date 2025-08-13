@@ -6,16 +6,16 @@
 import json
 import os
 from jsonschema import validate, ValidationError
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 import time
 import re
 import copy
 # Import model configuration from config.py
-from config import OPENAI_API_KEY, ENCOUNTER_UPDATE_MODEL
+from config import GEMINI_API_KEY, ENCOUNTER_UPDATE_MODEL
 
 # Import OpenAI usage tracking (safe - won't break if fails)
 try:
-    from utils.openai_usage_tracker import track_response
+    from utils.gemini_usage_tracker import track_response
     USAGE_TRACKING_AVAILABLE = True
 except:
     USAGE_TRACKING_AVAILABLE = False
@@ -32,7 +32,7 @@ set_script_name("update_encounter")
 # Constants
 TEMPERATURE = 0.7
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 def load_encounter_schema():
     with open("schemas/encounter_schema.json", "r") as schema_file:

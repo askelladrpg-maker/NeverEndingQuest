@@ -100,7 +100,7 @@ import re
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 import config
 from utils.enhanced_logger import debug, info, warning, error, set_script_name
 
@@ -116,7 +116,7 @@ class ModuleStitcher:
         """Initialize module stitcher"""
         self.modules_dir = "modules"
         self.world_registry_file = "modules/world_registry.json"
-        self.client = OpenAI(api_key=config.OPENAI_API_KEY)
+        self.client = OpenAI(api_key=config.GEMINI_API_KEY)
         
         # Ensure directories exist
         os.makedirs(self.modules_dir, exist_ok=True)

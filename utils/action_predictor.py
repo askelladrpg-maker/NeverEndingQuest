@@ -39,11 +39,11 @@
 # ============================================================================
 
 import json
-from openai import OpenAI
-from config import OPENAI_API_KEY, ACTION_PREDICTION_MODEL
+from core.ai.gemini_wrapper import OpenAI
+from config import GEMINI_API_KEY, ACTION_PREDICTION_MODEL
 
 # Initialize OpenAI client
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 # Action prediction system prompt (condensed from full system analysis)
 ACTION_PREDICTION_PROMPT = """You are an action prediction agent for a D&D 5e AI system. Analyze user input to determine if it requires JSON actions in the AI response.

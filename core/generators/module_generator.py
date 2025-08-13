@@ -75,15 +75,15 @@ import random
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
-from openai import OpenAI
-from config import OPENAI_API_KEY, DM_MAIN_MODEL
+from core.ai.gemini_wrapper import OpenAI
+from config import GEMINI_API_KEY, DM_MAIN_MODEL
 import jsonschema
 from utils.module_path_manager import ModulePathManager
 from utils.file_operations import safe_write_json as save_json_safely
 from utils.enhanced_logger import debug, info, warning, error
 
 # Initialize OpenAI client
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 # Location ID prefix mapping to ensure unique IDs across areas
 LOCATION_PREFIX_MAP = {

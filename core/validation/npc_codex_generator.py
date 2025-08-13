@@ -48,7 +48,7 @@ import time
 import tempfile
 import shutil
 from datetime import datetime
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 import config
 from utils.module_path_manager import ModulePathManager
 from utils.encoding_utils import safe_json_load, safe_json_dump, sanitize_text
@@ -202,7 +202,7 @@ def extract_npcs_with_ai(module_content, module_name):
         list: List of dictionaries with NPC name and source information
     """
     try:
-        client = OpenAI(api_key=config.OPENAI_API_KEY)
+        client = OpenAI(api_key=config.GEMINI_API_KEY)
         
         # Create extraction prompt - avoid f-string issues with JSON content
         plot_content = module_content.get('plot_content', 'No plot content found')

@@ -38,10 +38,10 @@ import re
 # Add the project root to the Python path so we can import from utils, core, etc.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 from jsonschema import validate, ValidationError
 # Import model configuration from config.py
-from config import OPENAI_API_KEY, NPC_BUILDER_MODEL # Assuming API key might also be in config eventually
+from config import GEMINI_API_KEY, NPC_BUILDER_MODEL # Assuming API key might also be in config eventually
 from utils.module_path_manager import ModulePathManager
 from utils.enhanced_logger import debug, info, warning, error, set_script_name
 
@@ -53,12 +53,12 @@ RED = "\033[31m"
 YELLOW = "\033[33m"
 RESET = "\033[0m"
 
-# Use OPENAI_API_KEY from config
-client = OpenAI(api_key=OPENAI_API_KEY)
+# Use GEMINI_API_KEY from config
+client = OpenAI(api_key=GEMINI_API_KEY)
 # Note: The original npc_builder.py had a hardcoded API key here.
 # It's better practice to use the one from config.py.
-# If your config.py does not yet have OPENAI_API_KEY, you'll need to add it or adjust.
-# For now, I'll assume OPENAI_API_KEY is correctly defined in your config.py as used by other scripts.
+# If your config.py does not yet have GEMINI_API_KEY, you'll need to add it or adjust.
+# For now, I'll assume GEMINI_API_KEY is correctly defined in your config.py as used by other scripts.
 
 def load_schema(file_name):
     try:

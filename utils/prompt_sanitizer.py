@@ -4,7 +4,7 @@ Prompt sanitization for DALL-E content policy violations.
 Only used after a failure - no pre-processing.
 """
 
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 import config
 import re
 
@@ -13,7 +13,7 @@ def sanitize_prompt(prompt: str) -> str:
     Sanitize a prompt that was rejected by DALL-E.
     Uses GPT-4-mini to clean problematic content while preserving narrative.
     """
-    client = OpenAI(api_key=config.OPENAI_API_KEY)
+    client = OpenAI(api_key=config.GEMINI_API_KEY)
     
     sanitization_request = """You are a prompt sanitizer for DALL-E 3. The following prompt was rejected for content policy violations.
 

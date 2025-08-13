@@ -47,7 +47,7 @@ def main():
             print("IMPORTANT: OpenAI API Key Required")
             print("="*60)
             print("\n1. Open config.py in a text editor")
-            print("2. Find the line: OPENAI_API_KEY = \"your_openai_api_key_here\"")
+            print("2. Find the line: GEMINI_API_KEY = \"your_gemini_api_key_here\"")
             print("3. Replace \"your_openai_api_key_here\" with your actual OpenAI API key")
             print("4. Save the file and run the game again")
             print("\nGet your API key at: https://platform.openai.com/api-keys")

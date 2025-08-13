@@ -40,12 +40,12 @@ import json
 import random
 from typing import Dict, List, Any, Tuple
 from dataclasses import dataclass
-from openai import OpenAI
-from config import OPENAI_API_KEY, DM_MAIN_MODEL
+from core.ai.gemini_wrapper import OpenAI
+from config import GEMINI_API_KEY, DM_MAIN_MODEL
 from utils.module_path_manager import ModulePathManager
 
 # Initialize OpenAI client
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 @dataclass
 class AreaConfig:

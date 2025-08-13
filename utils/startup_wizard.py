@@ -19,7 +19,7 @@ import os
 import shutil
 from datetime import datetime
 from pathlib import Path
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 from jsonschema import validate, ValidationError
 from core.generators.module_stitcher import ModuleStitcher
 
@@ -91,7 +91,7 @@ if not web_mode:
     status_manager.set_callback(status_callback)
 
 # Initialize OpenAI client
-client = OpenAI(api_key=config.OPENAI_API_KEY)
+client = OpenAI(api_key=config.GEMINI_API_KEY)
 
 # Conversation file for character creation (separate from main game)
 STARTUP_CONVERSATION_FILE = "modules/conversation_history/startup_conversation.json"
@@ -1688,7 +1688,7 @@ Respond with ONLY a JSON object in this exact format:
   "politicalClimate": "brief political situation"
 }}"""
 
-        client = OpenAI(api_key=config.OPENAI_API_KEY)
+        client = OpenAI(api_key=config.GEMINI_API_KEY)
         response = client.chat.completions.create(
             model=config.DM_MINI_MODEL,
             messages=[{"role": "user", "content": prompt}],

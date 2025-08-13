@@ -1,35 +1,36 @@
 # Model Configuration Settings
 # This file contains all AI model configurations and can be safely committed to git
+# MIGRATED FROM OPENAI TO GEMINI API
 
 # --- Main Game Logic Models (used in main.py) ---
-DM_MAIN_MODEL = "gpt-4.1-2025-04-14"
-DM_SUMMARIZATION_MODEL = "gpt-4.1-mini-2025-04-14"
-DM_VALIDATION_MODEL = "gpt-4.1-2025-04-14"
+DM_MAIN_MODEL = "gemini-2.5-pro"
+DM_SUMMARIZATION_MODEL = "gemini-2.5-flash"
+DM_VALIDATION_MODEL = "gemini-2.5-pro"
 
 # --- Action Prediction Model (used in action_predictor.py) ---
-ACTION_PREDICTION_MODEL = "gpt-4.1-2025-04-14"  # Use full model for accurate action prediction
+ACTION_PREDICTION_MODEL = "gemini-2.5-pro"  # Use full model for accurate action prediction
 
 # --- Combat Simulation Models (used in combat_manager.py) ---
-COMBAT_MAIN_MODEL = "gpt-4.1-2025-04-14"
+COMBAT_MAIN_MODEL = "gemini-2.5-pro"
 # COMBAT_SCHEMA_UPDATER_MODEL - This was defined but not directly used.
 # If needed for update_player_info, update_npc_info, update_encounter called from combat_sim,
 # those modules will use their own specific models defined below.
-COMBAT_DIALOGUE_SUMMARY_MODEL = "gpt-4.1-mini-2025-04-14"
+COMBAT_DIALOGUE_SUMMARY_MODEL = "gemini-2.5-flash"
 
 # --- Utility and Builder Models ---
-NPC_BUILDER_MODEL = "gpt-4.1-2025-04-14"                # Used in npc_builder.py
-ADVENTURE_SUMMARY_MODEL = "gpt-4.1-mini-2025-04-14"
-CHARACTER_VALIDATOR_MODEL = "gpt-4.1-2025-04-14"    # Used in adv_summary.py
-PLOT_UPDATE_MODEL = "gpt-4.1-mini-2025-04-14"          # Used in plot_update.py
-PLAYER_INFO_UPDATE_MODEL = "gpt-4.1-mini-2025-04-14"   # Used in update_player_info.py
-NPC_INFO_UPDATE_MODEL = "gpt-4.1-mini-2025-04-14"      # Used in update_npc_info.py
-MONSTER_BUILDER_MODEL = "gpt-4.1-2025-04-14"
-ENCOUNTER_UPDATE_MODEL = "gpt-4.1-mini-2025-04-14"
-LEVEL_UP_MODEL = "gpt-4.1-2025-04-14"                  # Used in level_up.py
+NPC_BUILDER_MODEL = "gemini-2.5-pro"                # Used in npc_builder.py
+ADVENTURE_SUMMARY_MODEL = "gemini-2.5-flash"
+CHARACTER_VALIDATOR_MODEL = "gemini-2.5-pro"    # Used in adv_summary.py
+PLOT_UPDATE_MODEL = "gemini-2.5-flash"          # Used in plot_update.py
+PLAYER_INFO_UPDATE_MODEL = "gemini-2.5-flash"   # Used in update_player_info.py
+NPC_INFO_UPDATE_MODEL = "gemini-2.5-flash"      # Used in update_npc_info.py
+MONSTER_BUILDER_MODEL = "gemini-2.5-pro"
+ENCOUNTER_UPDATE_MODEL = "gemini-2.5-flash"
+LEVEL_UP_MODEL = "gemini-2.5-pro"                  # Used in level_up.py
 
 # --- Token Optimization Models ---
-DM_MINI_MODEL = "gpt-4.1-mini-2025-04-14"              # Used for simple conversations and plot-only updates
-DM_FULL_MODEL = "gpt-4.1-2025-04-14"                   # Used for complex actions requiring JSON operations
+DM_MINI_MODEL = "gemini-2.5-flash"              # Used for simple conversations and plot-only updates
+DM_FULL_MODEL = "gemini-2.5-pro"                   # Used for complex actions requiring JSON operations
 
 # --- Model Routing Settings ---
 ENABLE_INTELLIGENT_ROUTING = True                        # Enable/disable action-based model routing

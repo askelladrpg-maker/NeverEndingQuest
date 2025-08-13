@@ -10,10 +10,10 @@ import os
 import shutil
 import re
 from datetime import datetime
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 
 # Import project-specific modules
-from config import OPENAI_API_KEY, NPC_INFO_UPDATE_MODEL # Using a smaller, faster model is fine
+from config import GEMINI_API_KEY, NPC_INFO_UPDATE_MODEL # Using a smaller, faster model is fine
 from utils.module_path_manager import ModulePathManager
 from utils.file_operations import safe_read_json, safe_write_json
 from utils.enhanced_logger import debug, info, warning, error, set_script_name
@@ -21,7 +21,7 @@ from utils.enhanced_logger import debug, info, warning, error, set_script_name
 # Set script name for logging
 set_script_name("reconcile_location_state")
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 def create_area_backup(area_file_path):
     """Creates a timestamped backup of an area file before modification."""

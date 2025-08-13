@@ -40,12 +40,12 @@ import json
 import os
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
-from openai import OpenAI
-from config import OPENAI_API_KEY, DM_MAIN_MODEL
+from core.ai.gemini_wrapper import OpenAI
+from config import GEMINI_API_KEY, DM_MAIN_MODEL
 import jsonschema
 
 # Initialize OpenAI client
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 @dataclass
 class PlotPromptGuide:

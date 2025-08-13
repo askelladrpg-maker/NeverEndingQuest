@@ -55,11 +55,13 @@ import webbrowser
 from datetime import datetime
 import io
 from contextlib import redirect_stdout, redirect_stderr
-from openai import OpenAI
 from PIL import Image
 
 # Add parent directory to path so we can import from utils, core, etc.
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Import after path setup
+from core.ai.gemini_wrapper import OpenAI
 
 # Install debug interceptor before importing main
 from utils.redirect_debug_output import install_debug_interceptor, uninstall_debug_interceptor
@@ -70,6 +72,9 @@ import main as dm_main
 import utils.reset_campaign as reset_campaign
 from core.managers.status_manager import set_status_callback
 from utils.enhanced_logger import debug, info, warning, error, set_script_name
+from utils.cloud_storage import DriveManager
+from updates.save_game_manager import SaveGameManager
+from updates.cloud_save_game_manager import CloudSaveGameManager
 
 # Set script name for logging
 set_script_name("web_interface")
@@ -86,6 +91,9 @@ game_thread = None
 original_stdout = sys.stdout
 original_stderr = sys.stderr
 original_stdin = sys.stdin
+
+# Cloud Storage Manager
+drive_manager = None
 
 # Status callback function
 def emit_status_update(status_message, is_processing):
@@ -552,17 +560,19 @@ def handle_user_input(data):
         'content': user_input
     })
 
-@socketio.on('action')
+@socketio.on('handle_action')
 def handle_action(data):
-    """Handle direct action requests from the UI (save, load, reset)."""
-    action_type = data.get('action')
-    parameters = data.get('parameters', {})
-    debug(f"WEB_REQUEST: Received direct action from client: {action_type}", category="web_interface")
+    """Handles various actions from the frontend like saving, loading, etc."""
+    action_type = data.get("action")
+    parameters = data.get("parameters", {})
+    global game_thread
 
     if action_type == 'listSaves':
         try:
-            from updates.save_game_manager import SaveGameManager
-            manager = SaveGameManager()
+            if drive_manager:
+                manager = CloudSaveGameManager(drive_manager)
+            else:
+                manager = SaveGameManager()
             saves = manager.list_save_games()
             emit('save_list_response', saves)
         except Exception as e:
@@ -571,46 +581,56 @@ def handle_action(data):
 
     elif action_type == 'saveGame':
         try:
-            from updates.save_game_manager import SaveGameManager
-            manager = SaveGameManager()
+            if drive_manager:
+                manager = CloudSaveGameManager(drive_manager)
+            else:
+                manager = SaveGameManager()
             description = parameters.get("description", "")
             save_mode = parameters.get("saveMode", "essential")
             success, message = manager.create_save_game(description, save_mode)
             if success:
-                emit('system_message', {'content': f"Game saved: {message}"})
+                emit('action_response', {'status': 'success', 'message': f'Game saved successfully: {os.path.basename(message)}'})
             else:
-                emit('error', {'message': f"Save failed: {message}"})
+                emit('action_response', {'status': 'error', 'message': message})
         except Exception as e:
-            emit('error', {'message': f"Save failed: {str(e)}"})
+            emit('action_response', {'status': 'error', 'message': str(e)})
 
     elif action_type == 'restoreGame':
         try:
-            from updates.save_game_manager import SaveGameManager
-            manager = SaveGameManager()
+            if drive_manager:
+                manager = CloudSaveGameManager(drive_manager)
+            else:
+                manager = SaveGameManager()
             save_folder = parameters.get("saveFolder")
             success, message = manager.restore_save_game(save_folder)
             if success:
-                emit('restore_complete', {'message': 'Game restored successfully. Server restarting...'})
-                socketio.sleep(1)
-                print("INFO: Game restore successful. Server is shutting down for restart.")
-                os._exit(0)
+                emit('action_response', {'status': 'success', 'message': 'Game restored. Restarting session...'})
+                # Restart the game thread to apply the restored state
+                if game_thread and game_thread.is_alive():
+                    user_input_queue.put("exit") # Gracefully stop the old thread
+                    game_thread.join()
+                start_game_thread()
             else:
-                emit('error', {'message': f"Restore failed: {message}"})
+                emit('action_response', {'status': 'error', 'message': message})
         except Exception as e:
-            emit('error', {'message': f"Restore failed: {str(e)}"})
+            emit('action_response', {'status': 'error', 'message': str(e)})
     
     elif action_type == 'deleteSave':
         try:
-            from updates.save_game_manager import SaveGameManager
-            manager = SaveGameManager()
+            if drive_manager:
+                manager = CloudSaveGameManager(drive_manager)
+            else:
+                manager = SaveGameManager()
             save_folder = parameters.get("saveFolder")
             success, message = manager.delete_save_game(save_folder)
             if success:
-                emit('system_message', {'content': f"Save deleted: {message}"})
+                emit('action_response', {'status': 'success', 'message': message})
+                # Refresh the save list
+                handle_action({'action': 'listSaves'})
             else:
-                emit('error', {'message': f"Delete failed: {message}"})
+                emit('action_response', {'status': 'error', 'message': message})
         except Exception as e:
-            emit('error', {'message': f"Delete failed: {str(e)}"})
+            emit('action_response', {'status': 'error', 'message': str(e)})
 
     elif action_type == 'nuclearReset':
         try:
@@ -1216,7 +1236,7 @@ def handle_generate_image(data):
         from utils.file_operations import safe_read_json, safe_write_json
         
         # Initialize OpenAI client
-        client = OpenAI(api_key=config.OPENAI_API_KEY)
+        client = OpenAI(api_key=config.GEMINI_API_KEY)
         
         # Try to generate image
         try:
@@ -1425,7 +1445,7 @@ def send_output_to_clients():
                 last_token_update = current_time  # Update time FIRST to prevent retry loops
                 try:
                     # Try to import and get stats
-                    from utils.openai_usage_tracker import get_usage_stats
+                    from utils.gemini_usage_tracker import get_usage_stats
                     stats = get_usage_stats()
                     # Send to UI silently
                     socketio.emit('token_update', {
@@ -1518,6 +1538,19 @@ def open_browser():
     webbrowser.open(f'http://localhost:{port}')
 
 if __name__ == '__main__':
+    # Initialize Cloud Storage
+    try:
+        print("[Cloud Storage] Initializing Google Drive Manager...")
+        drive_manager = DriveManager()
+        if not drive_manager.service:
+            print("[WARNING] Google Drive service could not be initialized. Cloud features will be disabled.")
+            drive_manager = None
+        else:
+            print("[Cloud Storage] Google Drive Manager initialized successfully.")
+    except Exception as e:
+        print(f"[ERROR] Failed to initialize DriveManager: {e}")
+        drive_manager = None
+
     # Create templates directory if it doesn't exist
     os.makedirs('templates', exist_ok=True)
     

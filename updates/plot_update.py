@@ -5,19 +5,19 @@
 
 import json
 from jsonschema import validate, ValidationError
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 import time
 
 # Import OpenAI usage tracking (safe - won't break if fails)
 try:
-    from utils.openai_usage_tracker import track_response
+    from utils.gemini_usage_tracker import track_response
     USAGE_TRACKING_AVAILABLE = True
 except:
     USAGE_TRACKING_AVAILABLE = False
     def track_response(r): pass
 
 # Import model configuration from config.py
-from config import OPENAI_API_KEY, PLOT_UPDATE_MODEL
+from config import GEMINI_API_KEY, PLOT_UPDATE_MODEL
 from utils.module_path_manager import ModulePathManager
 from utils.file_operations import safe_write_json, safe_read_json
 from utils.enhanced_logger import debug, info, warning, error, set_script_name
@@ -25,7 +25,7 @@ from utils.enhanced_logger import debug, info, warning, error, set_script_name
 # Set script name for logging
 set_script_name("plot_update")
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 # Constants
 TEMPERATURE = 0.7

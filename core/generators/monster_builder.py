@@ -61,7 +61,7 @@ import re
 # Add the project root to the Python path so we can import from utils, core, etc.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 from jsonschema import validate, ValidationError
 import config
 from utils.module_path_manager import ModulePathManager
@@ -75,8 +75,8 @@ RED = "\033[31m"
 YELLOW = "\033[33m"
 RESET = "\033[0m"
 
-# Use OPENAI_API_KEY from config
-client = OpenAI(api_key=config.OPENAI_API_KEY)
+# Use GEMINI_API_KEY from config
+client = OpenAI(api_key=config.GEMINI_API_KEY)
 # Note: The original monster_builder.py had a hardcoded API key here.
 # It's better practice to use the one from config.py.
 

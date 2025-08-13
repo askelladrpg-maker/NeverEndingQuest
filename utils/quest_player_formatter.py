@@ -12,8 +12,8 @@ Uses AI to convert DM-oriented quest descriptions into immersive player-friendly
 import json
 import os
 from datetime import datetime
-from openai import OpenAI
-from config import OPENAI_API_KEY
+from core.ai.gemini_wrapper import OpenAI
+from config import GEMINI_API_KEY
 from utils.module_path_manager import ModulePathManager
 from utils.file_operations import safe_read_json, safe_write_json
 from utils.enhanced_logger import debug, info, warning, error, set_script_name
@@ -23,7 +23,7 @@ from utils.encoding_utils import sanitize_text
 set_script_name("quest_player_formatter")
 
 # Initialize OpenAI client
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 # Constants
 MODEL = "gpt-4o-mini"

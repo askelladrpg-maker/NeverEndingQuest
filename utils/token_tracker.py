@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Token and Request Tracking System for OpenAI API Usage
+Token and Request Tracking System for Gemini API Usage
 Tracks TPM (Tokens Per Minute) and RPM (Requests Per Minute)
 """
 
@@ -19,7 +19,7 @@ except ImportError:
     pass
 
 class TokenTracker:
-    """Track OpenAI API token usage with TPM and RPM calculations"""
+    """Track Gemini API token usage with TPM and RPM calculations"""
     
     def __init__(self):
         # Token tracking
@@ -59,7 +59,7 @@ class TokenTracker:
             self._clean_history()
     
     def track_response(self, response_data: Dict) -> Dict:
-        """Track tokens from OpenAI response"""
+        """Track tokens from Gemini response"""
         with self.lock:
             usage = {}
             
@@ -173,16 +173,16 @@ def get_tracker() -> TokenTracker:
         _tracker = TokenTracker()
     return _tracker
 
-def track_openai_request():
-    """Track an OpenAI request"""
+def track_gemini_request():
+    """Track an Gemini request"""
     tracker = get_tracker()
     tracker.track_request()
 
-def track_openai_response(response) -> Dict:
-    """Track OpenAI response and return usage data"""
+def track_gemini_response(response) -> Dict:
+    """Track Gemini response and return usage data"""
     tracker = get_tracker()
     
-    # Handle both raw dict and OpenAI response objects
+    # Handle both raw dict and Gemini response objects
     if hasattr(response, 'model_dump'):
         response_dict = response.model_dump()
     elif hasattr(response, 'to_dict'):

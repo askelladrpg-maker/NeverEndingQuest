@@ -6,11 +6,11 @@
 # level_up.py - Simplified level up system that returns changes dict
 
 import json
-from openai import OpenAI
-from config import OPENAI_API_KEY, LEVEL_UP_MODEL
+from core.ai.gemini_wrapper import OpenAI
+from config import GEMINI_API_KEY, LEVEL_UP_MODEL
 from .file_operations import safe_read_json
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 def load_leveling_info():
     """Load leveling information from text file"""

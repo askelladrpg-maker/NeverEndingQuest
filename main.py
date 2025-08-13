@@ -76,7 +76,7 @@ import sys
 import codecs
 import glob
 import time
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 from datetime import datetime, timedelta
 from termcolor import colored
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -93,7 +93,7 @@ from utils.encoding_utils import (
 
 # Import token tracking
 try:
-    from utils.openai_usage_tracker import track_response
+    from utils.gemini_usage_tracker import track_response
     USAGE_TRACKING_AVAILABLE = True
 except:
     USAGE_TRACKING_AVAILABLE = False
@@ -139,13 +139,13 @@ set_script_name(__name__)
 
 # Import model configurations from config.py
 from config import (
-    OPENAI_API_KEY,
+    GEMINI_API_KEY,
     DM_MAIN_MODEL,
     DM_SUMMARIZATION_MODEL,
     DM_VALIDATION_MODEL
 )
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=GEMINI_API_KEY)
 
 # Initialize location graph for path validation
 print("DEBUG: [LocationGraph] Initializing location graph at startup...")
@@ -1145,7 +1145,7 @@ def generate_module_summary(conversation_history, party_tracker_data, module_nam
         # If we have substantial conversation, generate AI summary from actual gameplay
         if len(meaningful_messages) >= 3:
             try:
-                from openai import OpenAI
+                from core.ai.gemini_wrapper import OpenAI
                 import config
                 
                 # Prepare conversation for summarization
@@ -1156,7 +1156,7 @@ def generate_module_summary(conversation_history, party_tracker_data, module_nam
                     conversation_text += f"{role}: {content}\n\n"
                 
                 # Generate summary using AI
-                client = OpenAI(api_key=config.OPENAI_API_KEY)
+                client = OpenAI(api_key=config.GEMINI_API_KEY)
                 
                 summary_prompt = f"""You are creating an adventure chronicle for a 5th edition session. Summarize this actual gameplay conversation from the {module_name} module into a compelling narrative story.
 
@@ -2716,7 +2716,7 @@ def main():
             print("IMPORTANT: OpenAI API Key Required")
             print("="*60)
             print("\n1. Open config.py in a text editor")
-            print("2. Find the line: OPENAI_API_KEY = \"your_openai_api_key_here\"")
+            print("2. Find the line: GEMINI_API_KEY = \"your_gemini_api_key_here\"")
             print("3. Replace \"your_openai_api_key_here\" with your actual OpenAI API key")
             print("4. Save the file and run the game again")
             print("\nGet your API key at: https://platform.openai.com/api-keys")

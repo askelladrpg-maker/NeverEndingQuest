@@ -55,7 +55,7 @@ import json
 import subprocess
 import os
 from datetime import datetime
-from openai import OpenAI
+from core.ai.gemini_wrapper import OpenAI
 import config
 from core.managers.location_manager import get_location_data
 from utils.module_path_manager import ModulePathManager
@@ -72,7 +72,7 @@ from utils.enhanced_logger import debug, info, warning, error, set_script_name
 
 # Import token tracking
 try:
-    from utils.openai_usage_tracker import track_response
+    from utils.gemini_usage_tracker import track_response
     USAGE_TRACKING_AVAILABLE = True
 except:
     USAGE_TRACKING_AVAILABLE = False
@@ -340,7 +340,7 @@ def get_module_starting_location(module_name: str) -> tuple:
 def _ai_analyze_starting_location(module_data: dict) -> tuple:
     """Use AI to analyze module data and determine the best starting location"""
     try:
-        client = OpenAI(api_key=config.OPENAI_API_KEY)
+        client = OpenAI(api_key=config.GEMINI_API_KEY)
         
         system_prompt = """You are an expert 5th edition adventure module analyst. Analyze the provided module data to determine the most logical starting location for player characters entering this adventure module.
 
@@ -1624,7 +1624,7 @@ def find_npc_in_areas(npc_name, path_manager, location_hint=None):
 def get_ai_npc_movement_decision(npc_name, context, npc_data, area_data, location_id, module_name, party_npcs=None, attempt=1):
     """Use AI to determine what to do with the NPC based on context"""
     try:
-        client = OpenAI(api_key=config.OPENAI_API_KEY)
+        client = OpenAI(api_key=config.GEMINI_API_KEY)
         
         # Get available locations for potential moves
         available_locations = []
