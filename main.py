@@ -3,10 +3,12 @@ import eventlet
 eventlet.monkey_patch()
 
 # Now that monkey_patch() has been called, we can import the Flask app.
-from web.web_interface import app
+# Now that monkey_patch() has been called, we can import the Flask app and socketio instance.
+from web.web_interface import app as flask_app, socketio
 
-# Gunicorn will look for this 'app' object.
-# The if __name__ == '__main__': block is not needed for Render's gunicorn execution.
+# Gunicorn will look for this 'app' object. For Flask-SocketIO, this must be the SocketIO instance.
+app = socketio
+
 # SPDX-License-Identifier: Fair-Source-1.0
 # License: See LICENSE file in the repository root
 # This software is subject to the terms of the Fair Source License.
