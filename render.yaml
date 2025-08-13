@@ -1,0 +1,15 @@
+# Configuration file for Render deployment
+
+services:
+  - type: web
+    name: neverending-quest
+    env: python
+    plan: free
+    pythonVersion: "3.11"
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT web.web_interface:app"
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false # Set this value directly in the Render dashboard
+      - key: PYTHON_VERSION
+        value: "3.11"
